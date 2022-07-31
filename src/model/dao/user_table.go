@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-07-31 12:12:02
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-07-31 15:21:56
+ * @LastEditTime: 2022-07-31 23:04:07
  */
 package dao
 
@@ -19,21 +19,21 @@ type User struct {
 	ID       uint `gorm:"autoIncrement:true;primaryKey;column:id;type:bigint(20)"`
 	UId      uint64
 	Password string
-	nick     string
-	name     string
-	birthday time.Time
-	sex      uint8
-	salt     string
+	Nick     string
+	Name     string
+	Birthday time.Time
+	Sex      uint8
+	Salt     string
 }
 
-type transformedUser struct {
+type TransformedUser struct {
 	ID       uint      `json:"id"`
 	UId      uint64    `json:"uid"`
 	Password string    `json:"password"`
-	nick     string    `json:"nick"`
-	birthday time.Time `json:"birthday"`
-	sex      uint8     `json:"sex"`
-	salt     string    `json:"salt`
+	Nick     string    `json:"nick"`
+	Birthday time.Time `json:"birthday"`
+	Sex      uint8     `json:"sex"`
+	Salt     string    `json:"salt"`
 }
 
 func (u *User) TableName() string {
