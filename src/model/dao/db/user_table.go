@@ -4,19 +4,16 @@
  * @Author: Adxiong
  * @Date: 2022-07-31 12:12:02
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-07-31 23:04:07
+ * @LastEditTime: 2022-08-01 23:52:51
  */
-package dao
+package db
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type User struct {
-	gorm.Model
-	ID       uint `gorm:"autoIncrement:true;primaryKey;column:id;type:bigint(20)"`
+	ID       uint `gorm:"column:id;type:bigint(20);autoIncrement:true;primaryKey;not null;" json:"-"`
 	UId      uint64
 	Password string
 	Nick     string

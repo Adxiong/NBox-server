@@ -4,9 +4,9 @@
  * @Author: Adxiong
  * @Date: 2022-07-31 11:49:24
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-07-31 15:22:48
+ * @LastEditTime: 2022-07-31 23:12:16
  */
-package dao
+package db
 
 import (
 	"fmt"
@@ -16,6 +16,8 @@ import (
 )
 
 var datetimePrecision = 2
+
+var GlobalDb *gorm.DB
 
 func NewDb() *gorm.DB {
 	db, err := gorm.Open(mysql.New(mysql.Config{
