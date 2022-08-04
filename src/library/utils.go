@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-04 22:50:15
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-04 23:17:14
+ * @LastEditTime: 2022-08-04 23:35:36
  */
 package utils
 
@@ -13,8 +13,22 @@ import (
 	"strings"
 )
 
+const (
+	LOG_WARNING = "Warning"
+	LOG_NOTICE  = "Notice"
+	LOG_ERROR   = "Error"
+	LOG_TRACE   = "Trace"
+	LOG_FATAL   = "Fatal"
+	LOG_OUTPUT  = "Output"
+)
+
+func GenLogMessage(logType string, actions string) string {
+	str := logType + "_" + GetPackageAndFunc() + "_" + actions
+	return str
+}
+
 func GetPackageAndFunc() string {
-	pc, _, _, _ := runtime.Caller(1)
+	pc, _, _, _ := runtime.Caller(2)
 	caller := runtime.FuncForPC(pc).Name()
 	arr := strings.Split(caller, ".")
 	for i, v := range arr {
