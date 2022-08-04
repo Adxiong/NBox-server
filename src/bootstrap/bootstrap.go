@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-07-31 23:07:29
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-01 23:12:09
+ * @LastEditTime: 2022-08-04 23:18:29
  */
 package bootstrap
 
@@ -15,6 +15,7 @@ import (
 
 func MustInit(ctx context.Context) {
 	InitMysql()
+
 }
 
 func InitMysql() {
