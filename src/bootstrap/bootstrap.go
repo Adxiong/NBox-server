@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-07-31 23:07:29
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-04 23:18:29
+ * @LastEditTime: 2022-08-07 17:27:57
  */
 package bootstrap
 
@@ -20,5 +20,9 @@ func MustInit(ctx context.Context) {
 
 func InitMysql() {
 	db.GlobalDb = db.NewDb()
+
 	db.GlobalDb.AutoMigrate(&db.User{})
+	db.GlobalDb.AutoMigrate(&db.Favorites{})
+	db.GlobalDb.AutoMigrate(&db.FavoritesGroup{})
+	db.GlobalDb.AutoMigrate(&db.Todo{})
 }
