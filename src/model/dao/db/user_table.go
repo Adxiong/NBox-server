@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-07-31 12:12:02
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-07 22:22:19
+ * @LastEditTime: 2022-08-08 00:00:53
  */
 package db
 
@@ -23,6 +23,7 @@ type User struct {
 	Birthday *time.Time `gorm:"column:birthday;comment:'生日'" json:"birthday"`
 	Sex      uint8      `gorm:"column:sex;comment:'性别 1男 2女'" json:"sex"`
 	Salt     string     `gorm:"column:sale;comment:'盐 密码加盐'" json:"salt"`
+	Deleted  uint8      `gorm:"column:deleted;comment:'已删除 0否 1是';not null; default:0" json:"deleted"`
 }
 
 var UserColumn = struct {
@@ -34,6 +35,7 @@ var UserColumn = struct {
 	Birthday  string
 	Sex       string
 	Salt      string
+	Deleted   string
 	CreatedAt string
 	UpdatedAt string
 	DeletedAt string
@@ -46,6 +48,7 @@ var UserColumn = struct {
 	Birthday:  "birthday",
 	Sex:       "sex",
 	Salt:      "salt",
+	Deleted:   "deleted",
 	CreatedAt: "created_at",
 	UpdatedAt: "updated_at",
 	DeletedAt: "deleted_ad",
