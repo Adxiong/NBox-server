@@ -4,11 +4,12 @@
  * @Author: Adxiong
  * @Date: 2022-08-01 23:11:27
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-10 23:41:29
+ * @LastEditTime: 2022-08-11 00:19:59
  */
 package db
 
 import (
+	"errors"
 	"fmt"
 
 	"golang.org/x/net/context"
@@ -56,7 +57,7 @@ func (user *User) FindByUID(ctx context.Context, uid uint64) (*User, error) {
 		UserColumn.UID: uid,
 	}
 	err := GlobalDb.Table(user.TableName()).Select("*").Where(where).First(res).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return res, err
 	}
 	return res, nil
