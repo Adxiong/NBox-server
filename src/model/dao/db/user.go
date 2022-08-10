@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-01 23:11:27
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-08 00:49:58
+ * @LastEditTime: 2022-08-10 23:41:29
  */
 package db
 
@@ -16,7 +16,7 @@ import (
 )
 
 type user interface {
-	AddUser()
+	Add()
 	UpdateByID()
 	FindByUID()
 }
@@ -26,7 +26,7 @@ func NewUser() *User {
 }
 
 // AddUser 新增用户记录
-func (user *User) AddUser(ctx context.Context) (*User, error) {
+func (user *User) Add(ctx context.Context) (*User, error) {
 	res := NewUser()
 	err := GlobalDb.Table(user.TableName()).Create(user).Error
 	if err != nil {
