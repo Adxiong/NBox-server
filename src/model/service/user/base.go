@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-09 23:16:19
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-11 00:26:22
+ * @LastEditTime: 2022-08-14 00:20:53
  */
 package user
 
@@ -14,6 +14,12 @@ import (
 	"nbox/src/model/dao/db"
 	"time"
 )
+
+type userService interface {
+	AddUser() (*User, error)
+	UpdateUserByUID()
+	FindUserByUID()
+}
 
 type User struct {
 	ID        uint
@@ -114,7 +120,7 @@ func updateByID(ctx context.Context, id uint64, params *UpdateUserParams) (int64
 	return rowsAffected, err
 }
 
-func FindUserByUID(ctx context.Context, uid uint64) (*User, error) {
+func findUserByUID(ctx context.Context, uid uint64) (*User, error) {
 	resUser := new(User)
 	var err error = nil
 
