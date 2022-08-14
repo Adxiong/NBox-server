@@ -4,9 +4,9 @@
  * @Author: Adxiong
  * @Date: 2022-08-14 00:11:33
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-14 00:23:54
+ * @LastEditTime: 2022-08-15 00:40:01
  */
-package user
+package user_service
 
 import "context"
 

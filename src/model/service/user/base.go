@@ -4,9 +4,9 @@
  * @Author: Adxiong
  * @Date: 2022-08-09 23:16:19
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-14 15:12:07
+ * @LastEditTime: 2022-08-15 00:40:04
  */
-package user
+package user_service
 
 import (
 	"context"
@@ -22,7 +22,7 @@ type userService interface {
 }
 
 type User struct {
-	ID        uint
+	ID        uint64
 	UID       uint64
 	Password  string
 	Nick      string
@@ -30,8 +30,8 @@ type User struct {
 	Birthday  *time.Time
 	Sex       uint8
 	Salt      string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt *time.Time
+	UpdatedAt *time.Time
 }
 
 type UpdateUserParams struct {

@@ -4,9 +4,9 @@
  * @Author: Adxiong
  * @Date: 2022-08-14 15:13:03
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-14 15:15:30
+ * @LastEditTime: 2022-08-15 00:39:47
  */
-package todo
+package todo_service
 
 type TodoService interface {
 }
