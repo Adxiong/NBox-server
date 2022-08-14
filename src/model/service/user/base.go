@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-09 23:16:19
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-14 00:20:53
+ * @LastEditTime: 2022-08-14 15:12:07
  */
 package user
 
@@ -41,6 +41,10 @@ type UpdateUserParams struct {
 	Birthday *time.Time
 	Sex      *uint8
 	Salt     *string
+}
+
+func NewUserService() *User {
+	return new(User)
 }
 
 func add(ctx context.Context, params *User) (*User, error) {
