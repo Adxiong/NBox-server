@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-14 15:13:03
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-15 23:20:16
+ * @LastEditTime: 2022-08-18 22:46:12
  */
 package todo_service
 
@@ -16,6 +16,10 @@ import (
 )
 
 type TodoService interface {
+	AddTodo(context.Context, *Todo) (*Todo, error)
+	UpdateTodoByID(context.Context, uint64, *UpdateTodoParams) (int64, error)
+	FindTodoByUID(context.Context, uint64) (*[]Todo, error)
+	DeleteByID(context.Context, uint64) (int64, error)
 }
 
 type Todo struct {
@@ -97,4 +101,29 @@ func deleteByID(ctx context.Context, id uint64) (int64, error) {
 		return rowsAffected, err
 	}
 	return rowsAffected, err
+}
+
+func findByUID(ctx context.Context, uid uint64) (*[]Todo, error) {
+	var result = []Todo{}
+
+	todoDao := db.NewTodo()
+	todoList, err := todoDao.FindTodoByUID(ctx, uid)
+	if err != nil {
+		fmt.Println(err)
+		return &result, err
+	}
+
+	for _, item := range *todoList {
+		todo := &Todo{
+			ID:        item.ID,
+			Content:   item.Content,
+			Status:    item.Status,
+			Creator:   item.Creator,
+			Deleted:   item.Deleted,
+			CreatedAt: item.CreatedAt,
+			UpdatedAt: item.UpdatedAt,
+		}
+		result = append(result, *todo)
+	}
+	return &result, nil
 }

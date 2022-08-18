@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-07 22:25:15
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-09 23:52:19
+ * @LastEditTime: 2022-08-18 22:25:27
  */
 package db
 
@@ -57,14 +57,14 @@ func (t *Todo) UpdateTodoByID(ctx context.Context, id uint64, vals map[string]in
 	return result.RowsAffected, nil
 }
 
-func (t *Todo) FindTodoByUID(ctx context.Context, uid uint64) (*Todo, error) {
-	result := NewTodo()
+func (t *Todo) FindTodoByUID(ctx context.Context, uid uint64) (*[]Todo, error) {
+	result := &[]Todo{}
 
 	where := map[string]interface{}{
 		TodoColumn.Creator: uid,
 	}
 
-	err := GlobalDb.Table(t.TableName()).Select("*").Where(where).First(result).Error
+	err := GlobalDb.Table(t.TableName()).Select("*").Where(where).Find(result).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return result, err
 	}
