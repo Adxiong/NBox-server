@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-07 22:25:15
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-18 22:25:27
+ * @LastEditTime: 2022-08-18 23:42:51
  */
 package db
 
@@ -39,7 +39,7 @@ func (t *Todo) AddTodo(ctx context.Context) (*Todo, error) {
 
 func (t *Todo) DelTodoByID(ctx context.Context, id uint64) (int64, error) {
 	var res int64
-	result := GlobalDb.Model(&Todo{}).Where("id = ?", id).Update(TodoColumn.Deleted, 1)
+	result := GlobalDb.Model(&Todo{}).Where("id = ?", id).Update(TodoColumn.IsDel, 1)
 	if result.Error != nil {
 		fmt.Println("删除错误", result.Error)
 		return res, fmt.Errorf("删除错误")

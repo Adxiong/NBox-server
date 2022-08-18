@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-14 15:13:03
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-18 22:46:12
+ * @LastEditTime: 2022-08-18 23:43:07
  */
 package todo_service
 
@@ -27,7 +27,7 @@ type Todo struct {
 	Content   string
 	Status    uint8
 	Creator   uint64
-	Deleted   uint8
+	IsDel     uint8
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
 }
@@ -44,7 +44,7 @@ func add(ctx context.Context, params *Todo) (*Todo, error) {
 		Content: params.Content,
 		Status:  params.Status,
 		Creator: params.Creator,
-		Deleted: params.Deleted,
+		IsDel:   params.IsDel,
 	}
 	dbTodo, err := todo.AddTodo(ctx)
 	if err != nil {
@@ -56,7 +56,7 @@ func add(ctx context.Context, params *Todo) (*Todo, error) {
 		Content:   dbTodo.Content,
 		Status:    dbTodo.Status,
 		Creator:   dbTodo.Creator,
-		Deleted:   dbTodo.Deleted,
+		IsDel:     dbTodo.IsDel,
 		CreatedAt: dbTodo.CreatedAt,
 		UpdatedAt: dbTodo.UpdatedAt,
 	}
@@ -78,7 +78,7 @@ func updateByID(ctx context.Context, id uint64, params *UpdateTodoParams) (int64
 	}
 
 	if params.Deleted != "" {
-		dbVals[db.TodoColumn.Deleted] = params.Deleted
+		dbVals[db.TodoColumn.IsDel] = params.Deleted
 	}
 
 	todoDao := db.NewTodo()
@@ -119,7 +119,7 @@ func findByUID(ctx context.Context, uid uint64) (*[]Todo, error) {
 			Content:   item.Content,
 			Status:    item.Status,
 			Creator:   item.Creator,
-			Deleted:   item.Deleted,
+			IsDel:     item.IsDel,
 			CreatedAt: item.CreatedAt,
 			UpdatedAt: item.UpdatedAt,
 		}

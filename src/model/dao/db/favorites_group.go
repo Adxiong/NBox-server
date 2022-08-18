@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-07 22:25:27
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-08 00:50:46
+ * @LastEditTime: 2022-08-18 23:41:07
  */
 package db
 
@@ -40,7 +40,7 @@ func (f *FavoritesGroup) Add(ctx context.Context) (*FavoritesGroup, error) {
 
 func (f *FavoritesGroup) DeleteByID(ctx context.Context, id uint64) (int64, error) {
 	var res int64
-	result := GlobalDb.Model(&FavoritesGroup{}).Where("id = ?", id).Update(FavoritesGroupColumn.Deleted, 1)
+	result := GlobalDb.Model(&FavoritesGroup{}).Where("id = ?", id).Update(FavoritesGroupColumn.IsDel, 1)
 	if result.Error != nil {
 		fmt.Println("删除失败")
 		return res, result.Error

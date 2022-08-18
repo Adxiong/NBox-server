@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-07 22:25:34
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-08 00:49:50
+ * @LastEditTime: 2022-08-18 23:37:03
  */
 package db
 
@@ -52,7 +52,7 @@ func (f *Favorites) UpdateTodoByID(ctx context.Context, id uint64, vals map[stri
 func (f *Favorites) DeleteByID(ctx context.Context, id uint64) (int64, error) {
 	var res int64
 
-	result := GlobalDb.Model(&Favorites{}).Where("id = ?", id).Update(FavoritesColumn.Deleted, 1)
+	result := GlobalDb.Model(&Favorites{}).Where("id = ?", id).Update(FavoritesColumn.IsDel, 1)
 	if result.Error != nil {
 		fmt.Println("删除失败", result.Error)
 		return res, fmt.Errorf("删除失败")
