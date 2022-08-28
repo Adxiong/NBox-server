@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-15 00:34:27
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-28 23:11:05
+ * @LastEditTime: 2022-08-29 00:05:50
  */
 package favorites_group_service
 
@@ -121,15 +121,23 @@ func (f *FavoritesGroup) UpdateByGID(ctx context.Context, params *UpdateFavorite
 		val[db.FavoritesGroupColumn.Title] = params.Title
 	}
 
-	if params.isDel == 1 {
-		val[db.FavoritesGroupColumn.IsDel] = params.isDel
+	rowsAffected, err := dbFg.UpdateByGID(ctx, gid, val)
+	if err != nil {
+		log.Printf("SERVICE_FAVORITES-GROUP_BASE_UpdateByGID_Failed.\nerror:%s\ngid:%d-val:%+v\n", err.Error(), gid, val)
+		return 0, fmt.Errorf("SERVICE_FAVORITES-GROUP_BASE_UpdateByGID_Failed")
 	}
-
-	dbFg.UpdateByGID(ctx, gid, val)
-
 	return rowsAffected, nil
 }
 
-func (f *FavoritesGroup) DeleteByGID() {
+func (f *FavoritesGroup) DeleteByGID(ctx context.Context, gid uint64) (int64, error) {
+	var rowsAffected int64
 
+	dbFg := db.NewFavoritesGroup()
+
+	rowsAffected, err := dbFg.DeleteByGID(ctx, gid)
+	if err != nil {
+		log.Printf("SERVICE_FAVORITES-GROUP_BASE_DeleteByGID_Failed.\nerror:%s\ngid:%d\n", err.Error(), gid)
+		return 0, fmt.Errorf("SERVICE_FAVORITES-GROUP_BASE_DeleteByGID_Failed")
+	}
+	return rowsAffected, nil
 }
