@@ -4,13 +4,14 @@
  * @Author: Adxiong
  * @Date: 2022-08-01 23:11:27
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-14 11:11:27
+ * @LastEditTime: 2022-08-28 18:35:32
  */
 package db
 
 import (
 	"errors"
 	"fmt"
+	"log"
 
 	"golang.org/x/net/context"
 	"gorm.io/gorm"
@@ -31,8 +32,8 @@ func (user *User) Add(ctx context.Context) (*User, error) {
 	res := NewUser()
 	err := GlobalDb.Table(user.TableName()).Create(user).Error
 	if err != nil {
-		fmt.Println("创建错误", err)
-		return res, fmt.Errorf("创建错误")
+		log.Println("添加错误", err)
+		return res, fmt.Errorf("添加错误")
 	}
 	res = user
 	return res, nil
@@ -43,8 +44,8 @@ func (user *User) UpdateByID(ctx context.Context, id uint64, vals map[string]int
 	var res int64
 	result := GlobalDb.Model(&User{}).Where("id = ?", id).Updates(vals)
 	if result.Error != nil {
-		fmt.Println("更新错误", result.Error)
-		return res, fmt.Errorf("更新错误")
+		log.Println("更新失败", result.Error)
+		return res, fmt.Errorf("更新失败")
 	}
 	return result.RowsAffected, nil
 }
@@ -58,7 +59,8 @@ func (user *User) FindByUID(ctx context.Context, uid uint64) (*User, error) {
 	}
 	err := GlobalDb.Table(user.TableName()).Select("*").Where(where).First(res).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return res, err
+		log.Println("查询失败", err)
+		return res, fmt.Errorf("查询失败")
 	}
 	return res, nil
 }

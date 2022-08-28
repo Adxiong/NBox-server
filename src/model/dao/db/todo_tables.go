@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-07 14:24:07
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-18 23:42:01
+ * @LastEditTime: 2022-08-28 18:26:55
  */
 package db
 
@@ -20,6 +20,8 @@ type Todo struct {
 	CreatedAt *time.Time `gorm:"column:create_at; comment:'创建时间'" json:"create_at"`
 	UpdatedAt *time.Time `grom:"column:update_at; comment:'更新时间'" json:"update_at"`
 }
+
+type TodoList []Todo
 
 var TodoColumn = struct {
 	ID        string

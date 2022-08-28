@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-07 14:11:29
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-18 23:36:40
+ * @LastEditTime: 2022-08-28 18:25:03
  */
 package db
 
@@ -21,6 +21,8 @@ type Favorites struct {
 	CreatedAt *time.Time `gorm:"column:create_at; comment:'创建时间'" json:"create_at"`
 	UpdatedAt *time.Time `gorm:"column:update_at; comment:'更新时间'" json:"update_at"`
 }
+
+type FavoritesList []Favorites
 
 var FavoritesColumn = struct {
 	ID        string

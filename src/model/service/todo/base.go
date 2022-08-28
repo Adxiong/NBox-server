@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-14 15:13:03
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-18 23:43:07
+ * @LastEditTime: 2022-08-28 22:53:09
  */
 package todo_service
 
@@ -39,14 +39,14 @@ type UpdateTodoParams struct {
 }
 
 func add(ctx context.Context, params *Todo) (*Todo, error) {
-	todo := &db.Todo{
+	dbTodo := &db.Todo{
 		ID:      params.ID,
 		Content: params.Content,
 		Status:  params.Status,
 		Creator: params.Creator,
 		IsDel:   params.IsDel,
 	}
-	dbTodo, err := todo.AddTodo(ctx)
+	err := dbTodo.AddTodo(ctx)
 	if err != nil {
 		fmt.Println(err.Error())
 		return &Todo{}, err

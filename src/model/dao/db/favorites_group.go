@@ -4,67 +4,64 @@
  * @Author: Adxiong
  * @Date: 2022-08-07 22:25:27
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-18 23:41:07
+ * @LastEditTime: 2022-08-28 23:08:24
  */
 package db
 
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"gorm.io/gorm"
 )
 
 type favoritesGroup interface {
 	Add()
-	DeleteByID()
-	UpdateByID()
-	FindByUID()
+	DeleteByGID()
+	UpdateByGID()
+	FindListByUID()
 }
 
 func NewFavoritesGroup() *FavoritesGroup {
 	return new(FavoritesGroup)
 }
 
-func (f *FavoritesGroup) Add(ctx context.Context) (*FavoritesGroup, error) {
-	result := NewFavoritesGroup()
-
+func (f *FavoritesGroup) Add(ctx context.Context) error {
 	err := GlobalDb.Table(f.TableName()).Create(f).Error
 	if err != nil {
-		fmt.Println("增加失败", err)
-		return result, err
+		log.Println("添加失败", err)
+		return fmt.Errorf("添加失败")
 	}
-	result = f
-	return result, nil
+	return nil
 }
 
-func (f *FavoritesGroup) DeleteByID(ctx context.Context, id uint64) (int64, error) {
+func (f *FavoritesGroup) DeleteByGID(ctx context.Context, gid uint64) (int64, error) {
 	var res int64
-	result := GlobalDb.Model(&FavoritesGroup{}).Where("id = ?", id).Update(FavoritesGroupColumn.IsDel, 1)
+	result := GlobalDb.Model(&FavoritesGroup{}).Where("gid = ?", gid).Update(FavoritesGroupColumn.IsDel, 1)
 	if result.Error != nil {
-		fmt.Println("删除失败")
-		return res, result.Error
+		log.Println("删除失败", result.Error)
+		return res, fmt.Errorf("删除失败")
 	}
 	return result.RowsAffected, nil
 }
 
-func (f *FavoritesGroup) UpdateByID(ctx context.Context, id uint64, val map[string]interface{}) (int64, error) {
+func (f *FavoritesGroup) UpdateByGID(ctx context.Context, gid uint64, val map[string]interface{}) (int64, error) {
 	var res int64
-	result := GlobalDb.Model(&FavoritesGroup{}).Where("id = ?", id).Updates(val)
+	result := GlobalDb.Model(&FavoritesGroup{}).Where("gid = ?", gid).Updates(val)
 	if result.Error != nil {
-		fmt.Println("更新失败")
-		return res, result.Error
+		log.Println("更新失败", result.Error)
+		return res, fmt.Errorf("更新失败")
 	}
 	return result.RowsAffected, nil
 }
 
-func (f *FavoritesGroup) FindByUID(ctx context.Context, uid uint64) (*[]FavoritesGroup, error) {
-	result := make([]FavoritesGroup, 0)
-
-	err := GlobalDb.Table(f.TableName()).Where("createID = ?", uid).Find(result).Error
+func (f *FavoritesGroup) FindListByUID(ctx context.Context, uid uint64) (*FavoritesGroupList, error) {
+	var res = make(FavoritesGroupList, 0)
+	err := GlobalDb.Table(f.TableName()).Where("createID = ?", uid).Find(res).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return &result, err
+		log.Println("查询失败", err)
+		return &res, fmt.Errorf("查询失败")
 	}
-	return &result, nil
-
+	return &res, nil
 }

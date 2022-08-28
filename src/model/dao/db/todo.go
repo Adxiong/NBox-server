@@ -4,12 +4,13 @@
  * @Author: Adxiong
  * @Date: 2022-08-07 22:25:15
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-18 23:42:51
+ * @LastEditTime: 2022-08-28 22:34:25
  */
 package db
 
 import (
 	"fmt"
+	"log"
 
 	"golang.org/x/net/context"
 	"gorm.io/gorm"
@@ -19,30 +20,28 @@ type todo interface {
 	AddTodo()
 	DelTodoByID()
 	UpdateTodoByID()
-	FindTodoByUID()
+	FindTodoListByUID()
 }
 
 func NewTodo() *Todo {
 	return new(Todo)
 }
 
-func (t *Todo) AddTodo(ctx context.Context) (*Todo, error) {
-	result := NewTodo()
+func (t *Todo) AddTodo(ctx context.Context) error {
 	err := GlobalDb.Table(t.TableName()).Create(t).Error
 	if err != nil {
-		fmt.Println("创建错误", err)
-		return result, fmt.Errorf("创建错误")
+		log.Println("添加失败", err)
+		return fmt.Errorf("添加失败")
 	}
-	result = t
-	return result, err
+	return err
 }
 
 func (t *Todo) DelTodoByID(ctx context.Context, id uint64) (int64, error) {
 	var res int64
 	result := GlobalDb.Model(&Todo{}).Where("id = ?", id).Update(TodoColumn.IsDel, 1)
 	if result.Error != nil {
-		fmt.Println("删除错误", result.Error)
-		return res, fmt.Errorf("删除错误")
+		log.Println("删除失败", result.Error)
+		return res, fmt.Errorf("删除失败")
 	}
 	return result.RowsAffected, nil
 }
@@ -51,14 +50,14 @@ func (t *Todo) UpdateTodoByID(ctx context.Context, id uint64, vals map[string]in
 	var res int64
 	result := GlobalDb.Model(&Todo{}).Where("id = ?", id).Updates(vals)
 	if result.Error != nil {
-		fmt.Println("更新错误", result.Error)
+		log.Println("更新失败", result.Error)
 		return res, fmt.Errorf("更新失败")
 	}
 	return result.RowsAffected, nil
 }
 
-func (t *Todo) FindTodoByUID(ctx context.Context, uid uint64) (*[]Todo, error) {
-	result := &[]Todo{}
+func (t *Todo) FindTodoByUID(ctx context.Context, uid uint64) (*TodoList, error) {
+	var result = make(TodoList, 0)
 
 	where := map[string]interface{}{
 		TodoColumn.Creator: uid,
@@ -66,7 +65,8 @@ func (t *Todo) FindTodoByUID(ctx context.Context, uid uint64) (*[]Todo, error) {
 
 	err := GlobalDb.Table(t.TableName()).Select("*").Where(where).Find(result).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return result, err
+		log.Println("查询失败", err)
+		return &result, fmt.Errorf("查询失败")
 	}
-	return result, nil
+	return &result, nil
 }
