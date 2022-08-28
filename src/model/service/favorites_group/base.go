@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-15 00:34:27
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-29 00:05:50
+ * @LastEditTime: 2022-08-29 00:06:58
  */
 package favorites_group_service
 
@@ -31,8 +31,7 @@ type FavoritesGroup struct {
 type FavoritesGroupList []FavoritesGroup
 
 type UpdateFavoritesGroupParams struct {
-	Title string `json:"title"`
-	isDel uint8  `json:"is_del"`
+	Title string
 }
 
 type FavoritesGroupServices interface {
