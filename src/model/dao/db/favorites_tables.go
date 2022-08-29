@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-07 14:11:29
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-28 18:25:03
+ * @LastEditTime: 2022-08-29 23:26:16
  */
 package db
 
@@ -12,6 +12,7 @@ import "time"
 
 type Favorites struct {
 	ID        uint64     `gorm:"primarykey; column:id;" json:"id"`
+	FID       uint64     `gorm:"column:fid;commit:'业务id'" json:"fid"`
 	Title     string     `gorm:"column:title; comment:'收藏标题'" json:"title"`
 	Addr      string     `gorm:"column:addr; comment:'收藏地址'" json:"addr"`
 	GroupID   uint64     `gorm:"column:group_id; comment:'群组id'" json:"group_id"`
@@ -26,6 +27,7 @@ type FavoritesList []Favorites
 
 var FavoritesColumn = struct {
 	ID        string
+	FID       string
 	Title     string
 	Addr      string
 	GroupID   string
@@ -36,6 +38,7 @@ var FavoritesColumn = struct {
 	UpdatedAt string
 }{
 	ID:        "id",
+	FID:       "fid",
 	Title:     "title",
 	Addr:      "addr",
 	GroupID:   "group_id",

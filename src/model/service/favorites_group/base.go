@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-15 00:34:27
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-29 00:06:58
+ * @LastEditTime: 2022-08-29 23:51:14
  */
 package favorites_group_service
 
@@ -45,7 +45,7 @@ func NewFavoritesGroup() *FavoritesGroup {
 	return new(FavoritesGroup)
 }
 
-func (f *FavoritesGroup) Add(ctx context.Context, params FavoritesGroup) (*FavoritesGroup, error) {
+func (f *FavoritesGroup) Add(ctx context.Context, params *FavoritesGroup) (*FavoritesGroup, error) {
 	dbFg := db.FavoritesGroup{
 		GID:     params.GID,
 		Title:   params.Title,
@@ -57,7 +57,7 @@ func (f *FavoritesGroup) Add(ctx context.Context, params FavoritesGroup) (*Favor
 	if err != nil {
 		log.Println("SERVICE_FAVORITES-GROUP_BASE_FavoritesAdd_Failed")
 		log.Printf("params: %+v", dbFg)
-		return &FavoritesGroup{}, fmt.Errorf("SERVICE_FAVORITES-GROUP_BASE_FavoritesAdd_Failed")
+		return &FavoritesGroup{}, fmt.Errorf("Favorites_Group_FavoritesAdd_Failed")
 	}
 
 	result := &FavoritesGroup{
@@ -83,7 +83,7 @@ func (f *FavoritesGroup) FindListByUID(ctx context.Context, uid uint64) (*Favori
 			"SERVICE_FAVORITES-GROUP_BASE_FindListByUID_Failed. \n error:%s \n uid:%d\n",
 			err.Error(), uid,
 		)
-		return &FavoritesGroupList{}, fmt.Errorf("SERVICE_FAVORITES-GROUP_BASE_FindListByUID_Failed")
+		return &FavoritesGroupList{}, fmt.Errorf("Favorites_Group_FindListByUID_Failed")
 	}
 
 	if len(*list) == 0 {
@@ -123,7 +123,7 @@ func (f *FavoritesGroup) UpdateByGID(ctx context.Context, params *UpdateFavorite
 	rowsAffected, err := dbFg.UpdateByGID(ctx, gid, val)
 	if err != nil {
 		log.Printf("SERVICE_FAVORITES-GROUP_BASE_UpdateByGID_Failed.\nerror:%s\ngid:%d-val:%+v\n", err.Error(), gid, val)
-		return 0, fmt.Errorf("SERVICE_FAVORITES-GROUP_BASE_UpdateByGID_Failed")
+		return 0, fmt.Errorf("Favorites_Group_UpdateByGID_Failed")
 	}
 	return rowsAffected, nil
 }
@@ -136,7 +136,7 @@ func (f *FavoritesGroup) DeleteByGID(ctx context.Context, gid uint64) (int64, er
 	rowsAffected, err := dbFg.DeleteByGID(ctx, gid)
 	if err != nil {
 		log.Printf("SERVICE_FAVORITES-GROUP_BASE_DeleteByGID_Failed.\nerror:%s\ngid:%d\n", err.Error(), gid)
-		return 0, fmt.Errorf("SERVICE_FAVORITES-GROUP_BASE_DeleteByGID_Failed")
+		return 0, fmt.Errorf("Favorites_Group_DeleteByGID_Failed")
 	}
 	return rowsAffected, nil
 }

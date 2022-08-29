@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-07 22:25:34
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-28 18:34:17
+ * @LastEditTime: 2022-08-29 23:46:53
  */
 package db
 
@@ -18,8 +18,8 @@ import (
 
 type favorites interface {
 	Add()
-	UpdateByID()
-	DeleteByID()
+	UpdateByFID()
+	DeleteByFID()
 	FindListByGID()
 }
 
@@ -28,21 +28,18 @@ func NewFavorites() *Favorites {
 }
 
 // Add 增加favorites记录
-func (f *Favorites) Add(ctx context.Context) (*Favorites, error) {
-	result := NewFavorites()
-
+func (f *Favorites) Add(ctx context.Context) error {
 	err := GlobalDb.Table(f.TableName()).Create(f).Error
 	if err != nil {
 		log.Println("添加失败", err)
-		return result, fmt.Errorf("添加失败")
+		return fmt.Errorf("添加失败")
 	}
-	result = f
-	return result, nil
+	return nil
 }
 
-func (f *Favorites) UpdateTodoByID(ctx context.Context, id uint64, vals map[string]interface{}) (int64, error) {
+func (f *Favorites) UpdateTodoByFID(ctx context.Context, fid uint64, vals map[string]interface{}) (int64, error) {
 	var res int64
-	result := GlobalDb.Model(&Favorites{}).Where("id = ?", id).Updates(vals)
+	result := GlobalDb.Model(&Favorites{}).Where("fid = ?", fid).Updates(vals)
 	if result.Error != nil {
 		log.Println("更新失败", result.Error)
 		return res, fmt.Errorf("更新失败")
@@ -50,10 +47,10 @@ func (f *Favorites) UpdateTodoByID(ctx context.Context, id uint64, vals map[stri
 	return result.RowsAffected, nil
 }
 
-func (f *Favorites) DeleteByID(ctx context.Context, id uint64) (int64, error) {
+func (f *Favorites) DeleteByFID(ctx context.Context, fid uint64) (int64, error) {
 	var res int64
 
-	result := GlobalDb.Model(&Favorites{}).Where("id = ?", id).Update(FavoritesColumn.IsDel, 1)
+	result := GlobalDb.Model(&Favorites{}).Where("fid = ?", fid).Update(FavoritesColumn.IsDel, 1)
 	if result.Error != nil {
 		log.Println("删除失败", result.Error)
 		return res, fmt.Errorf("删除失败")
