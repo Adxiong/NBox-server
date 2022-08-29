@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-09 23:16:19
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-15 23:06:33
+ * @LastEditTime: 2022-08-30 00:28:40
  */
 package user_service
 
@@ -16,9 +16,9 @@ import (
 )
 
 type userService interface {
-	AddUser() (*User, error)
-	UpdateUserByUID()
-	FindUserByUID()
+	Add()
+	UpdateByUID()
+	FindByUID()
 }
 
 type User struct {
@@ -32,6 +32,8 @@ type User struct {
 	Salt      string
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
+	IsDel     uint8
+	Version   uint64
 }
 
 type UpdateUserParams struct {
@@ -47,9 +49,9 @@ func NewUserService() *User {
 	return new(User)
 }
 
-func add(ctx context.Context, params *User) (*User, error) {
+func (*User) Add(ctx context.Context, params *User) (*User, error) {
 
-	user := &db.User{
+	dbUser := &db.User{
 		ID:       params.ID,
 		UID:      params.UID,
 		Password: params.Password,
@@ -58,64 +60,66 @@ func add(ctx context.Context, params *User) (*User, error) {
 		Birthday: params.Birthday,
 		Sex:      params.Sex,
 		Salt:     params.Salt,
+		IsDel:    0,
+		Version:  1,
 	}
 
-	dbUser, err := user.Add(ctx)
+	user, err := dbUser.Add(ctx)
 	if err != nil {
 		fmt.Println("SERVICE_USER_Add_Failed", err)
 		return &User{}, err
 	}
 	result := &User{
-		ID:       dbUser.ID,
-		UID:      dbUser.UID,
-		Name:     dbUser.Name,
-		Password: dbUser.Password,
-		Nick:     dbUser.Nick,
-		Birthday: dbUser.Birthday,
-		Sex:      dbUser.Sex,
-		Salt:     dbUser.Salt,
+		ID:       user.ID,
+		UID:      user.UID,
+		Name:     user.Name,
+		Password: user.Password,
+		Nick:     user.Nick,
+		Birthday: user.Birthday,
+		Sex:      user.Sex,
+		Salt:     user.Salt,
 	}
 	return result, nil
 }
 
-func updateByID(ctx context.Context, id uint64, params *UpdateUserParams) (int64, error) {
+func (*User) UpdateByID(ctx context.Context, id uint64, params *UpdateUserParams) (int64, error) {
 	var rowsAffected int64
 	var err error = nil
 
-	dbVals := map[string]interface{}{}
+	val := map[string]interface{}{}
 
 	if params.Nick != nil {
-		dbVals[db.UserColumn.Nick] = params.Nick
+		val[db.UserColumn.Nick] = params.Nick
 	}
 
 	if params.Name != nil {
-		dbVals[db.UserColumn.Name] = params.Name
+		val[db.UserColumn.Name] = params.Name
 	}
 
 	if params.Password != nil {
-		dbVals[db.UserColumn.Password] = params.Password
+		val[db.UserColumn.Password] = params.Password
 	}
 
 	if params.Birthday != nil {
-		dbVals[db.UserColumn.Birthday] = params.Birthday
+		val[db.UserColumn.Birthday] = params.Birthday
 	}
 
 	if params.Sex != nil {
-		dbVals[db.UserColumn.Sex] = params.Sex
+		val[db.UserColumn.Sex] = params.Sex
 	}
 
 	if params.Salt != nil {
-		dbVals[db.UserColumn.Salt] = params.Salt
+		val[db.UserColumn.Salt] = params.Salt
 	}
 
-	if len(dbVals) == 0 {
+	if len(val) == 0 {
 		fmt.Println("SERVICE_USER_BASE_updateByID_Params_Empty")
 		return rowsAffected, err
 	}
 
 	dbDao := db.NewUser()
 
-	rowsAffected, err = dbDao.UpdateByID(ctx, id, dbVals)
+	rowsAffected, err = dbDao.UpdateByID(ctx, id, val)
 
 	if err != nil {
 		fmt.Printf("SERVICE_USER_BASE_updateByID_Failed,[error] %s\n", err.Error())
@@ -124,7 +128,7 @@ func updateByID(ctx context.Context, id uint64, params *UpdateUserParams) (int64
 	return rowsAffected, err
 }
 
-func findUserByUID(ctx context.Context, uid uint64) (*User, error) {
+func (*User) FindListByUID(ctx context.Context, uid uint64) (*User, error) {
 	resUser := new(User)
 	var err error = nil
 

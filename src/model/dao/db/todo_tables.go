@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-07 14:24:07
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-28 18:26:55
+ * @LastEditTime: 2022-08-30 00:07:13
  */
 package db
 
@@ -12,6 +12,7 @@ import "time"
 
 type Todo struct {
 	ID        uint64     `gorm:"primarykey;column:id" json:"id"`
+	TID       uint64     `gorm:"column:tid; comment:'tid'" json:"tid"`
 	Content   string     `gorm:"column:content;comment:'todo内容'" json:"content"`
 	Status    uint8      `gorm:"column:status;comment:'todo状态 1进行中 2已完成'" json:"status"`
 	Creator   uint64     `gorm:"column:creator;comment:'创建者id'" json:"creator"`
@@ -25,6 +26,7 @@ type TodoList []Todo
 
 var TodoColumn = struct {
 	ID        string
+	TID       string
 	Content   string
 	Status    string
 	Creator   string
@@ -34,6 +36,7 @@ var TodoColumn = struct {
 	UpdatedAt string
 }{
 	ID:        "id",
+	TID:       "tid",
 	Content:   "content",
 	Status:    "status",
 	Creator:   "creator",

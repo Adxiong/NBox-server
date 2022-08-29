@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-07 22:25:15
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-28 22:34:25
+ * @LastEditTime: 2022-08-30 00:17:45
  */
 package db
 
@@ -17,17 +17,17 @@ import (
 )
 
 type todo interface {
-	AddTodo()
-	DelTodoByID()
-	UpdateTodoByID()
-	FindTodoListByUID()
+	Add()
+	DeleteByID()
+	UpdateByID()
+	FindListByUID()
 }
 
 func NewTodo() *Todo {
 	return new(Todo)
 }
 
-func (t *Todo) AddTodo(ctx context.Context) error {
+func (t *Todo) Add(ctx context.Context) error {
 	err := GlobalDb.Table(t.TableName()).Create(t).Error
 	if err != nil {
 		log.Println("添加失败", err)
@@ -36,9 +36,9 @@ func (t *Todo) AddTodo(ctx context.Context) error {
 	return err
 }
 
-func (t *Todo) DelTodoByID(ctx context.Context, id uint64) (int64, error) {
+func (t *Todo) DeleteByTID(ctx context.Context, tid uint64) (int64, error) {
 	var res int64
-	result := GlobalDb.Model(&Todo{}).Where("id = ?", id).Update(TodoColumn.IsDel, 1)
+	result := GlobalDb.Model(&Todo{}).Where("tid = ?", tid).Update(TodoColumn.IsDel, 1)
 	if result.Error != nil {
 		log.Println("删除失败", result.Error)
 		return res, fmt.Errorf("删除失败")
@@ -46,9 +46,9 @@ func (t *Todo) DelTodoByID(ctx context.Context, id uint64) (int64, error) {
 	return result.RowsAffected, nil
 }
 
-func (t *Todo) UpdateTodoByID(ctx context.Context, id uint64, vals map[string]interface{}) (int64, error) {
+func (t *Todo) UpdateByTID(ctx context.Context, tid uint64, vals map[string]interface{}) (int64, error) {
 	var res int64
-	result := GlobalDb.Model(&Todo{}).Where("id = ?", id).Updates(vals)
+	result := GlobalDb.Model(&Todo{}).Where("tid = ?", tid).Updates(vals)
 	if result.Error != nil {
 		log.Println("更新失败", result.Error)
 		return res, fmt.Errorf("更新失败")
@@ -56,7 +56,7 @@ func (t *Todo) UpdateTodoByID(ctx context.Context, id uint64, vals map[string]in
 	return result.RowsAffected, nil
 }
 
-func (t *Todo) FindTodoByUID(ctx context.Context, uid uint64) (*TodoList, error) {
+func (t *Todo) FindListByUID(ctx context.Context, uid uint64) (*TodoList, error) {
 	var result = make(TodoList, 0)
 
 	where := map[string]interface{}{

@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-14 15:13:27
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-29 23:58:12
+ * @LastEditTime: 2022-08-30 00:28:22
  */
 package favorites_service
 
@@ -50,8 +50,8 @@ func (f *Favorites) Add(ctx context.Context, params *Favorites) (*Favorites, err
 		Title:    params.Title,
 		Addr:     params.Addr,
 		GroupID:  params.GroupID,
-		IsDel:    params.IsDel,
-		Version:  params.Version,
+		IsDel:    0,
+		Version:  1,
 		CreateID: params.CreateID,
 	}
 	err := favorites.Add(ctx)
@@ -62,11 +62,10 @@ func (f *Favorites) Add(ctx context.Context, params *Favorites) (*Favorites, err
 	}
 	result := &Favorites{
 		ID:        favorites.ID,
+		FID:       favorites.FID,
 		Title:     favorites.Title,
 		Addr:      favorites.Title,
 		GroupID:   favorites.GroupID,
-		IsDel:     favorites.IsDel,
-		Version:   favorites.Version,
 		CreateID:  favorites.CreateID,
 		CreatedAt: favorites.CreatedAt,
 		UpdatedAt: favorites.UpdatedAt,
@@ -86,6 +85,11 @@ func (f *Favorites) UpdateByFID(ctx context.Context, fid uint64, params *UpdateF
 
 	if params.GroupID != nil {
 		val[db.FavoritesColumn.GroupID] = params.GroupID
+	}
+
+	if len(val) == 0 {
+		fmt.Println("SERVICE_FAVORITES_BASE_UpdateByFID_Params_Empty")
+		return 0, nil
 	}
 
 	dao := db.NewFavorites()
@@ -131,8 +135,6 @@ func (f *Favorites) FindListByGID(ctx context.Context, gid uint64) (*FavoritesLi
 			Title:     item.Title,
 			Addr:      item.Addr,
 			GroupID:   item.GroupID,
-			IsDel:     item.IsDel,
-			Version:   item.Version,
 			CreateID:  item.CreateID,
 			CreatedAt: item.CreatedAt,
 			UpdatedAt: item.UpdatedAt,

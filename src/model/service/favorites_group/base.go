@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-15 00:34:27
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-29 23:51:14
+ * @LastEditTime: 2022-08-30 00:27:40
  */
 package favorites_group_service
 
@@ -51,6 +51,8 @@ func (f *FavoritesGroup) Add(ctx context.Context, params *FavoritesGroup) (*Favo
 		Title:   params.Title,
 		BgColor: params.BgColor,
 		Creator: params.Creator,
+		IsDel:   0,
+		Version: 1,
 	}
 
 	err := dbFg.Add(ctx)
@@ -65,8 +67,6 @@ func (f *FavoritesGroup) Add(ctx context.Context, params *FavoritesGroup) (*Favo
 		GID:       params.GID,
 		Title:     dbFg.Title,
 		BgColor:   dbFg.BgColor,
-		IsDel:     dbFg.IsDel,
-		Version:   dbFg.Version,
 		Creator:   dbFg.Creator,
 		CreatedAt: dbFg.CreatedAt,
 		UpdatedAt: dbFg.UpdatedAt,
@@ -101,8 +101,6 @@ func (f *FavoritesGroup) FindListByUID(ctx context.Context, uid uint64) (*Favori
 			Title:     item.Title,
 			BgColor:   item.BgColor,
 			Creator:   item.Creator,
-			Version:   item.Version,
-			IsDel:     item.IsDel,
 			CreatedAt: item.CreatedAt,
 			UpdatedAt: item.UpdatedAt,
 		}
@@ -120,6 +118,10 @@ func (f *FavoritesGroup) UpdateByGID(ctx context.Context, params *UpdateFavorite
 		val[db.FavoritesGroupColumn.Title] = params.Title
 	}
 
+	if len(val) == 0 {
+		fmt.Println("SERVICE_FAVORITES-GROUP_BASE_UpdateByGID_Params_Empty")
+		return rowsAffected, nil
+	}
 	rowsAffected, err := dbFg.UpdateByGID(ctx, gid, val)
 	if err != nil {
 		log.Printf("SERVICE_FAVORITES-GROUP_BASE_UpdateByGID_Failed.\nerror:%s\ngid:%d-val:%+v\n", err.Error(), gid, val)
