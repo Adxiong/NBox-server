@@ -4,14 +4,13 @@
  * @Author: Adxiong
  * @Date: 2022-07-31 09:58:00
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-07 17:48:12
+ * @LastEditTime: 2022-08-31 00:03:25
  */
 package main
 
 import (
 	"context"
 	"nbox/src/bootstrap"
-	. "nbox/src/controller"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,10 +22,6 @@ func main() {
 	defer cancel()
 
 	bootstrap.MustInit(ctx)
-	LoadUserRoutes(r)
-	LoadFavoritesRoutes(r)
-	LoadTodoRoutes(r)
-	LoadToolsRoutes(r)
-
+	bootstrap.Start(ctx, r)
 	r.Run(":8000")
 }
