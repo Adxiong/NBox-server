@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-07-31 12:12:02
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-30 00:23:11
+ * @LastEditTime: 2022-09-01 00:02:29
  */
 package db
 
@@ -16,11 +16,8 @@ type User struct {
 	ID        uint64     `gorm:"primarykey" json:"id"`
 	UID       uint64     `gorm:"column:uid;comment:'用户唯一id'" json:"uid"`
 	Password  string     `gorm:"column:password;comment:'密码'" json:"password"`
-	Nick      string     `gorm:"column:nick;comment:'昵称'" json:"nick"`
-	Name      string     `gorm:"column:name;comment:'姓名'" json:"name"`
-	Birthday  *time.Time `gorm:"column:birthday;comment:'生日'" json:"birthday"`
-	Sex       uint8      `gorm:"column:sex;comment:'性别 1男 2女'" json:"sex"`
-	Salt      string     `gorm:"column:sale;comment:'盐 密码加盐'" json:"salt"`
+	Username  string     `gorm:"column:username;comment:'用户名'" json:"username"`
+	Email     string     `gorm:"column:email;comment:'邮箱'" json:"email"`
 	CreatedAt *time.Time `gorm:"column:create_at;comment:'创建时间'" json:"create_at"`
 	UpdatedAt *time.Time `gorm:"column:update_at;comment:'更新时间'" json:"update_at"`
 	IsDel     uint8      `gorm:"column:is_del;comment:'已删除 0否 1是';not null; default:0" json:"is_del"`
@@ -31,11 +28,8 @@ var UserColumn = struct {
 	ID        string
 	UID       string
 	Password  string
-	Nick      string
-	Name      string
-	Birthday  string
-	Sex       string
-	Salt      string
+	Username  string
+	Email     string
 	CreatedAt string
 	UpdatedAt string
 	IsDel     string
@@ -44,11 +38,8 @@ var UserColumn = struct {
 	ID:        "id",
 	UID:       "uid",
 	Password:  "password",
-	Nick:      "nick",
-	Name:      "name",
-	Birthday:  "birthday",
-	Sex:       "sex",
-	Salt:      "salt",
+	Username:  "username",
+	Email:     "email",
 	CreatedAt: "created_at",
 	UpdatedAt: "updated_at",
 	IsDel:     "is_del",

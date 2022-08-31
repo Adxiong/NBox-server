@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-09 23:16:19
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-30 00:28:40
+ * @LastEditTime: 2022-09-01 00:04:49
  */
 package user_service
 
@@ -25,11 +25,8 @@ type User struct {
 	ID        uint64
 	UID       uint64
 	Password  string
-	Nick      string
-	Name      string
-	Birthday  *time.Time
-	Sex       uint8
-	Salt      string
+	Username  string
+	Email     string
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
 	IsDel     uint8
@@ -38,11 +35,7 @@ type User struct {
 
 type UpdateUserParams struct {
 	Password *string
-	Nick     *string
-	Name     *string
-	Birthday *time.Time
-	Sex      *uint8
-	Salt     *string
+	Username *string
 }
 
 func NewUserService() *User {
@@ -50,16 +43,12 @@ func NewUserService() *User {
 }
 
 func (*User) Add(ctx context.Context, params *User) (*User, error) {
-
 	dbUser := &db.User{
 		ID:       params.ID,
 		UID:      params.UID,
 		Password: params.Password,
-		Name:     params.Name,
-		Nick:     params.Nick,
-		Birthday: params.Birthday,
-		Sex:      params.Sex,
-		Salt:     params.Salt,
+		Username: params.Username,
+		Email:    params.Email,
 		IsDel:    0,
 		Version:  1,
 	}
@@ -72,12 +61,8 @@ func (*User) Add(ctx context.Context, params *User) (*User, error) {
 	result := &User{
 		ID:       user.ID,
 		UID:      user.UID,
-		Name:     user.Name,
-		Password: user.Password,
-		Nick:     user.Nick,
-		Birthday: user.Birthday,
-		Sex:      user.Sex,
-		Salt:     user.Salt,
+		Username: user.Username,
+		Email:    user.Email,
 	}
 	return result, nil
 }
@@ -88,28 +73,12 @@ func (*User) UpdateByID(ctx context.Context, id uint64, params *UpdateUserParams
 
 	val := map[string]interface{}{}
 
-	if params.Nick != nil {
-		val[db.UserColumn.Nick] = params.Nick
-	}
-
-	if params.Name != nil {
-		val[db.UserColumn.Name] = params.Name
+	if params.Username != nil {
+		val[db.UserColumn.Username] = params.Username
 	}
 
 	if params.Password != nil {
 		val[db.UserColumn.Password] = params.Password
-	}
-
-	if params.Birthday != nil {
-		val[db.UserColumn.Birthday] = params.Birthday
-	}
-
-	if params.Sex != nil {
-		val[db.UserColumn.Sex] = params.Sex
-	}
-
-	if params.Salt != nil {
-		val[db.UserColumn.Salt] = params.Salt
 	}
 
 	if len(val) == 0 {
@@ -143,11 +112,8 @@ func (*User) FindListByUID(ctx context.Context, uid uint64) (*User, error) {
 		ID:        dbUser.ID,
 		UID:       dbUser.UID,
 		Password:  dbUser.Password,
-		Nick:      dbUser.Nick,
-		Name:      dbUser.Name,
-		Birthday:  dbUser.Birthday,
-		Sex:       dbUser.Sex,
-		Salt:      dbUser.Salt,
+		Username:  dbUser.Username,
+		Email:     dbUser.Email,
 		CreatedAt: dbUser.CreatedAt,
 		UpdatedAt: dbUser.UpdatedAt,
 	}
