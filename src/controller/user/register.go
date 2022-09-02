@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-30 23:07:18
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-09-02 22:30:52
+ * @LastEditTime: 2022-09-03 00:03:28
  */
 package user
 
@@ -19,7 +19,7 @@ type createParams struct {
 	user_service.User
 }
 
-func AddUser(ctx *gin.Context) {
+func Register(ctx *gin.Context) {
 	params, err := checkAddUserParams(ctx)
 	if err != nil {
 		ctx.JSON(200, "msg:"+err.Error())
@@ -48,9 +48,4 @@ func checkAddUserParams(ctx *gin.Context) (*createParams, error) {
 		return nil, fmt.Errorf("params is invalid")
 	}
 	return params, nil
-}
-
-func FindUser(ctx *gin.Context) {
-	ctx.JSON(200, "msg:'ok'")
-
 }

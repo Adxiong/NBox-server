@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-07-31 10:21:23
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-31 00:35:09
+ * @LastEditTime: 2022-09-03 00:04:07
  */
 package controller
 
@@ -34,10 +34,10 @@ type RouterHandler struct {
 type HandleFuncs []gin.HandlerFunc
 
 var routes = map[string]RouterHandler{
-	"/user/add": {
+	"/user/register": {
 		Method: request.METHODPOST,
 		Handle: HandleFuncs{
-			user.AddUser,
+			user.Register,
 		},
 	},
 	"/user/update": {
@@ -46,10 +46,10 @@ var routes = map[string]RouterHandler{
 			user.UpdateUser,
 		},
 	},
-	"/user/user": {
+	"/user/login": {
 		Method: request.METHODPOST,
 		Handle: HandleFuncs{
-			user.FindUser,
+			user.Login,
 		},
 	},
 
