@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-30 23:07:18
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-09-01 00:17:59
+ * @LastEditTime: 2022-09-02 22:30:52
  */
 package user
 
@@ -20,7 +20,7 @@ type createParams struct {
 }
 
 func AddUser(ctx *gin.Context) {
-	params, err := checkParams(ctx)
+	params, err := checkAddUserParams(ctx)
 	if err != nil {
 		ctx.JSON(200, "msg:"+err.Error())
 	}
@@ -40,7 +40,7 @@ func AddUser(ctx *gin.Context) {
 	ctx.JSON(200, "msg:'ok'")
 }
 
-func checkParams(ctx *gin.Context) (*createParams, error) {
+func checkAddUserParams(ctx *gin.Context) (*createParams, error) {
 	params := &createParams{}
 
 	err := ctx.ShouldBindQuery(params)
@@ -50,10 +50,6 @@ func checkParams(ctx *gin.Context) (*createParams, error) {
 	return params, nil
 }
 
-func UpdateUser(ctx *gin.Context) {
-	ctx.JSON(200, "msg:'ok'")
-
-}
 func FindUser(ctx *gin.Context) {
 	ctx.JSON(200, "msg:'ok'")
 

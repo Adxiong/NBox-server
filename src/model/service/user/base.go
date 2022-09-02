@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-09 23:16:19
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-09-01 00:04:49
+ * @LastEditTime: 2022-09-02 23:52:52
  */
 package user_service
 
@@ -34,8 +34,8 @@ type User struct {
 }
 
 type UpdateUserParams struct {
-	Password *string
-	Username *string
+	Password string
+	Username string
 }
 
 func NewUserService() *User {
@@ -73,11 +73,11 @@ func (*User) UpdateByID(ctx context.Context, id uint64, params *UpdateUserParams
 
 	val := map[string]interface{}{}
 
-	if params.Username != nil {
+	if params.Username != "" {
 		val[db.UserColumn.Username] = params.Username
 	}
 
-	if params.Password != nil {
+	if params.Password != "" {
 		val[db.UserColumn.Password] = params.Password
 	}
 
