@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-01 23:11:27
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-28 18:35:32
+ * @LastEditTime: 2022-09-04 22:15:12
  */
 package db
 
@@ -21,6 +21,7 @@ type user interface {
 	Add()
 	UpdateByID()
 	FindByUID()
+	FindByEmail()
 }
 
 func NewUser() *User {
@@ -56,6 +57,21 @@ func (user *User) FindByUID(ctx context.Context, uid uint64) (*User, error) {
 
 	where := map[string]interface{}{
 		UserColumn.UID: uid,
+	}
+	err := GlobalDb.Table(user.TableName()).Select("*").Where(where).First(res).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		log.Println("查询失败", err)
+		return res, fmt.Errorf("查询失败")
+	}
+	return res, nil
+}
+
+// FindByEmail 根据用户邮箱查询用户信息
+func (user *User) FindByEmail(ctx context.Context, email string) (*User, error) {
+	res := NewUser()
+
+	where := map[string]interface{}{
+		UserColumn.Email: email,
 	}
 	err := GlobalDb.Table(user.TableName()).Select("*").Where(where).First(res).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
