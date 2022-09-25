@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-07-31 23:05:56
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-09-04 23:50:31
+ * @LastEditTime: 2022-09-24 22:19:07
  */
 package bootstrap
 
@@ -31,8 +31,12 @@ func Start(ctx context.Context) {
 	//    第3个参数 - redis地址, 格式，host:port
 	//    第4个参数 - redis密码
 	//    第5个参数 - session加密密钥
-	store, _ := redis.NewStore(10, "tcp", "127.0.0.1:6379", "", []byte("secret"))
+	store, errRedis := redis.NewStore(10, "tcp", "127.0.0.1:6379", "", []byte("secret"))
+	if errRedis != nil {
+		log.Fatalln(errRedis)
+	}
 	r.Use(sessions.Sessions("session", store))
+
 	// 注册路由
 	RegisterController(ctx, r)
 

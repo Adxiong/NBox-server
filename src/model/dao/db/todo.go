@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-07 22:25:15
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-30 00:17:45
+ * @LastEditTime: 2022-09-25 22:47:21
  */
 package db
 
@@ -56,14 +56,14 @@ func (t *Todo) UpdateByTID(ctx context.Context, tid uint64, vals map[string]inte
 	return result.RowsAffected, nil
 }
 
-func (t *Todo) FindListByUID(ctx context.Context, uid uint64) (*TodoList, error) {
+func (t *Todo) FindListByUID(ctx context.Context, uid uint64, page uint64, size uint64) (*TodoList, error) {
 	var result = make(TodoList, 0)
 
 	where := map[string]interface{}{
 		TodoColumn.Creator: uid,
 	}
-
-	err := GlobalDb.Table(t.TableName()).Select("*").Where(where).Find(result).Error
+	offset := page * size
+	err := GlobalDb.Table(t.TableName()).Select("*").Where(where).Offset(int(offset)).Limit(int(size)).Find(result).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		log.Println("查询失败", err)
 		return &result, fmt.Errorf("查询失败")

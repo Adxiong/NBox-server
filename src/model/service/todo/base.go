@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-14 15:13:03
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-30 00:27:19
+ * @LastEditTime: 2022-09-25 22:46:49
  */
 package todo_service
 
@@ -37,6 +37,10 @@ type TodoList []Todo
 type UpdateTodoParams struct {
 	Content string
 	Status  uint8
+}
+
+func NewTodoService() *Todo {
+	return &Todo{}
 }
 
 func (todo *Todo) Add(ctx context.Context, params *Todo) (*Todo, error) {
@@ -106,10 +110,12 @@ func (todo *Todo) DeleteByTID(ctx context.Context, tid uint64) (int64, error) {
 	return rowsAffected, err
 }
 
-func FindListByUID(ctx context.Context, uid uint64) (*TodoList, error) {
-
+func (todo *Todo) FindListByUID(ctx context.Context, uid uint64, page uint64, size uint64) (*TodoList, error) {
+	if size == 0 {
+		size = 20
+	}
 	todoDao := db.NewTodo()
-	todoList, err := todoDao.FindListByUID(ctx, uid)
+	todoList, err := todoDao.FindListByUID(ctx, uid, page, size)
 	if err != nil {
 		fmt.Println(err)
 		return &TodoList{}, err
