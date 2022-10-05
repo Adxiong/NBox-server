@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-08-14 15:13:27
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-08-30 00:28:22
+ * @LastEditTime: 2022-10-05 23:07:16
  */
 package favorites_service
 
@@ -42,6 +42,10 @@ type UpdateFavoritesParams struct {
 	Title   *string
 	Addr    *string
 	GroupID *uint64
+}
+
+func NewFavorites() *Favorites {
+	return &Favorites{}
 }
 
 func (f *Favorites) Add(ctx context.Context, params *Favorites) (*Favorites, error) {

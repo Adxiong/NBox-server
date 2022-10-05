@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-09-25 22:49:26
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-10-02 23:27:25
+ * @LastEditTime: 2022-10-03 00:02:24
  */
 package todo
 
@@ -39,6 +39,10 @@ func UpdateTodo(ctx *gin.Context) {
 
 	if errUpdate != nil {
 		log.Println("error", errUpdate)
+		ctx.JSON(200, "msg: update failed")
+	}
+
+	if rowsAffected == 0 {
 		ctx.JSON(200, "msg: update failed")
 	}
 
